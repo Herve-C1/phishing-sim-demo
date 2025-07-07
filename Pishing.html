@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Portail sécurisé</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      text-align: center;
+      padding: 50px;
+    }
+    .fake-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #999;
+      display: inline-block;
+    }
+    .alert {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="fake-box">
+    <h2>🔒 Portail de Connexion Sécurisée</h2>
+    <p class="alert" id="phish-message">Chargement du message sécurisé...</p>
+    <form>
+      <input type="text" placeholder="Nom d'utilisateur" disabled><br><br>
+      <input type="password" placeholder="Mot de passe" disabled><br><br>
+      <button disabled>Connexion</button>
+    </form>
+  </div>
+
+  <p style="margin-top:40px; font-size: 12px;">⚠️ Ceci est une simulation éducative — aucune donnée n'est réellement collectée.</p>
+
+  <script>
+    fetch("https://ipinfo.io/json?token=demo") // Remplace "demo" par une clé gratuite si tu veux
+      .then(response => response.json())
+      .then(data => {
+        const country = data.country;
+        const city = data.city;
+        let message = "";
+
+        if (country === "TG") {
+          message = "⚠️ Attention : une activité suspecte a été détectée sur votre compte Moov Money. Veuillez vous reconnecter immédiatement pour éviter la suspension.";
+        } else if (country === "FR") {
+          message = "🔐 Votre compte Orange est temporairement verrouillé. Veuillez vérifier votre identité.";
+        } else if (country === "BJ") {
+          message = "🚨 Mise à jour requise : veuillez entrer vos informations pour éviter l'interruption MTN Bénin.";
+        } else {
+          message = `🔔 Connexion détectée depuis ${city} (${country}). Veuillez confirmer votre identité.`;
+        }
+
+        document.getElementById("phish-message").innerText = message;
+      })
+      .catch(error => {
+        document.getElementById("phish-message").innerText = "Impossible de récupérer la localisation.";
+      });
+  </script>
+
+</body>
+</html>
