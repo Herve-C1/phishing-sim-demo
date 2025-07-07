@@ -21,6 +21,13 @@
       color: red;
       font-weight: bold;
     }
+    #ipinfo {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #444;
+      text-align: left;
+      white-space: pre-line;
+    }
   </style>
 </head>
 <body>
@@ -31,36 +38,54 @@
     <form>
       <input type="text" placeholder="Nom d'utilisateur"><br><br>
       <input type="password" placeholder="Mot de passe"><br><br>
-      <button>Connexion</button>
+      <button type="submit">Connexion</button>
     </form>
+    <div id="ipinfo">Chargement des informations IP...</div>
   </div>
 
   <p style="margin-top:40px; font-size: 12px;">⚠️ Ceci est une simulation éducative — aucune donnée n'est réellement collectée.</p>
 
   <script>
-    fetch("https://ipinfo.io/json?token=demo") // Remplace "demo" par une clé gratuite si tu veux
+    fetch("https://ipinfo.io/json?token=e4275e5662db2e")
       .then(response => response.json())
       .then(data => {
-        const country = data.country;
+        const ip = data.ip;
         const city = data.city;
+        const region = data.region;
+        const country = data.country;
+        const loc = data.loc;
+        const org = data.org;
+        const timezone = data.timezone;
+
+        // Affichage dans le bloc prévu
+        document.getElementById("ipinfo").innerText =
+          `Adresse IP : ${ip}
+Ville : ${city}
+Région : ${region}
+Pays : ${country}
+Coordonnées GPS : ${loc}
+Fournisseur : ${org}
+Fuseau horaire : ${timezone}`;
+
+        // Message contextuel
         let message = "";
-
         if (country === "TG") {
-          message = "⚠️ Attention : une activité suspecte a été détectée sur votre compte Moov Money. Veuillez vous reconnecter immédiatement pour éviter la suspension.";
+          message = "⚠️ Attention : activité suspecte détectée sur votre compte Moov Money.";
         } else if (country === "FR") {
-          message = "🔐 Votre compte Orange est temporairement verrouillé. Veuillez vérifier votre identité.";
+          message = "🔐 Votre compte Orange est temporairement verrouillé.";
         } else if (country === "BJ") {
-          message = "🚨 Mise à jour requise : veuillez entrer vos informations pour éviter l'interruption MTN Bénin.";
+          message = "🚨 Mise à jour requise pour votre ligne MTN Bénin.";
         } else {
-          message = `🔔 Connexion détectée depuis ${city} (${country}). Veuillez confirmer votre identité.`;
+          message = `🔔 Connexion détectée depuis ${city} (${country}).`;
         }
-
         document.getElementById("phish-message").innerText = message;
       })
       .catch(error => {
-        document.getElementById("phish-message").innerText = "Impossible de récupérer la localisation.";
+        document.getElementById("ipinfo").innerText = "Erreur de récupération des informations IP.";
+        console.error(error);
       });
   </script>
 
 </body>
 </html>
+
